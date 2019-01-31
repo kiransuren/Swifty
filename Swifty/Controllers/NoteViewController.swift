@@ -35,6 +35,19 @@ class NoteViewController: UITableViewController {
         
     }
     
+    //MARK: - Swipe TableView Methods
+    override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let action = UIContextualAction(style: .destructive, title: "Delete") { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
+            print("Ok item will be deleted")
+            success(true)
+            self.context.delete(self.NoteArray[indexPath.row])
+            self.NoteArray.remove(at: indexPath.row)
+            self.saveData()
+        }
+        action.backgroundColor = .red
+        return UISwipeActionsConfiguration(actions: [action])
+    }
+    
     
     //MARK: - Persistent Data Storage Methods
     //Saves context (to core data)
@@ -80,7 +93,14 @@ class NoteViewController: UITableViewController {
         alert.addAction(action)
         alert.addTextField { (field) in
             field.placeholder = "Enter a new note"
+            let heightConstraint = NSLayoutConstraint(item: field, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 60)
+            field.font = UIFont(name: "Verdana", size: 20)
+            field.autocapitalizationType = UITextAutocapitalizationType.words
+            field.spellCheckingType = UITextSpellCheckingType.yes
+            field.addConstraint(heightConstraint)
+            field.minimumFontSize = 30.0
             textField = field
+            
         }
         
         present(alert, animated: true)
