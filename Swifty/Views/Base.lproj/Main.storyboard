@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -40,10 +41,50 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <segue destination="taK-ac-xhC" kind="show" identifier="toNoteEditor" id="evg-RO-vfB"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="U3h-Z5-7LA" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="646" y="-250"/>
+        </scene>
+        <!--Note Edit View Controller-->
+        <scene sceneID="Gls-ZP-WeK">
+            <objects>
+                <viewController id="taK-ac-xhC" customClass="NoteEditViewController" customModule="Swifty" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Ffg-Mi-Z7K">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Xea-aI-2la">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <color key="backgroundColor" red="0.82352941176470584" green="0.84313725490196079" blue="0.82745098039215681" alpha="1" colorSpace="calibratedRGB"/>
+                            </imageView>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="R7V-nC-Nyw">
+                                <rect key="frame" x="16" y="83" width="343" height="446"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.82352941176470584" green="0.84313725490196079" blue="0.82745098039215681" alpha="1" colorSpace="calibratedRGB"/>
+                                <attributedString key="attributedText"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="Xea-aI-2la" firstAttribute="trailing" secondItem="Def-yb-GMe" secondAttribute="trailing" id="0EO-Lt-GMm"/>
+                            <constraint firstItem="Xea-aI-2la" firstAttribute="top" secondItem="Def-yb-GMe" secondAttribute="top" id="0Z1-p5-jxV"/>
+                            <constraint firstItem="Xea-aI-2la" firstAttribute="bottom" secondItem="Def-yb-GMe" secondAttribute="bottom" id="3l7-8G-9H4"/>
+                            <constraint firstItem="Xea-aI-2la" firstAttribute="leading" secondItem="Def-yb-GMe" secondAttribute="leading" id="iq6-uU-Tut"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Def-yb-GMe"/>
+                    </view>
+                    <connections>
+                        <outlet property="noteTextView" destination="R7V-nC-Nyw" id="eDa-29-8iS"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qJH-na-oqZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1600.8" y="-251.42428785607197"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="ME4-e1-ZJ9">
@@ -57,6 +98,9 @@
                             <fontDescription key="fontDescription" name="Avenir-BookOblique" family="Avenir" pointSize="24"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </textAttributes>
+                        <textAttributes key="largeTitleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </textAttributes>
                     </navigationBar>
                     <connections>
                         <segue destination="sPB-dL-JAW" kind="relationship" relationship="rootViewController" id="MzY-UN-fl5"/>
@@ -67,4 +111,5 @@
             <point key="canvasLocation" x="-308" y="-250"/>
         </scene>
     </scenes>
+    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
 </document>

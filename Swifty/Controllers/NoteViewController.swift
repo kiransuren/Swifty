@@ -9,15 +9,23 @@
 import UIKit
 import CoreData
 
-class NoteViewController: UITableViewController {
+class NoteViewController: UITableViewController, AddNoteDelegate {
 
     var NoteArray = [Note]()                                                                            //Array of Notes when app is running
-    
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext       //Context referring to AppDelegate Persistent Data Storage
     
     override func viewDidLoad() {
         super.viewDidLoad()
         loadData()
+    }
+    
+    //MARK: - AddNote Delegate
+    func addItem(value: String?) {
+        let newNote = Note(context: context)
+        newNote.content = value!
+        NoteArray.append(newNote)
+        saveData()
+        tableView.reloadData()
     }
 
     // MARK: - Table View Datasource
@@ -77,9 +85,11 @@ class NoteViewController: UITableViewController {
     
     @IBAction func addButton(_ sender: UIBarButtonItem) {
         
+        performSegue(withIdentifier: "toNoteEditor", sender: self)
+        loadData()
         
+    /*
         var textField = UITextField()
-        
         let alert = UIAlertController(title: "Add new note", message: "", preferredStyle: .alert)           //Alert controller popup
         let action = UIAlertAction(title: "Add", style: .default) { (action) in                             //When add button is pressed
             let newNote = Note(context: self.context)                                                       //Create new note value
@@ -104,7 +114,14 @@ class NoteViewController: UITableViewController {
         }
         
         present(alert, animated: true)
+    */
         
     }
     
+    
+    //MARK: - Miscellaneous Methods
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let destination = segue.destination as! NoteEditViewController
+        destination.delegate = self
+    }
 }
