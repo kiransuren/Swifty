@@ -10,11 +10,13 @@ import UIKit
 import CoreData
 
 protocol AddNoteDelegate{
-    func addItem(value: String?)
+    func addItem(value: String?, isNew: Bool)
 }
 
 class NoteEditViewController: UIViewController {
     
+    var isNew: Bool = true
+    var oldValue: String = ""
     var delegate: AddNoteDelegate?
     @IBOutlet weak var noteTextView: UITextView!
     
@@ -22,6 +24,10 @@ class NoteEditViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         noteTextView.font = UIFont(name: "Helvetica Neue", size: 18)
+        if !isNew{
+            noteTextView.text = oldValue
+            isNew = false
+        }
         
     }
     
@@ -31,12 +37,13 @@ class NoteEditViewController: UIViewController {
         if parent == nil {
             //let newNote = Note(context: context)
             //newNote.content = noteTextView.text!
-            //saveData()
-            delegate?.addItem(value: noteTextView.text!)
+            //saveData()\
+            delegate?.addItem(value: noteTextView.text!, isNew: isNew)
             print("Adding item to array")
+            isNew = true
+
         }
     }
-    
 
 
 }

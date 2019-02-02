@@ -9,8 +9,12 @@
 import UIKit
 import CoreData
 
-class NoteViewController: UITableViewController, AddNoteDelegate {
 
+class NoteViewController: UITableViewController, AddNoteDelegate {
+    
+    var aboutRequest: Bool = false
+    var editNote: Bool = false
+    var selIndexPathRow: Int = 0
     var NoteArray = [Note]()                                                                            //Array of Notes when app is running
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext       //Context referring to AppDelegate Persistent Data Storage
     
@@ -20,12 +24,18 @@ class NoteViewController: UITableViewController, AddNoteDelegate {
     }
     
     //MARK: - AddNote Delegate
-    func addItem(value: String?) {
-        let newNote = Note(context: context)
-        newNote.content = value!
-        NoteArray.append(newNote)
-        saveData()
-        tableView.reloadData()
+    func addItem(value: String?, isNew: Bool) {
+        if isNew{
+            let newNote = Note(context: context)
+            newNote.content = value!
+            NoteArray.append(newNote)
+            saveData()
+            tableView.reloadData()
+        }else{
+            NoteArray[selIndexPathRow].content = value!
+            saveData()
+            tableView.reloadData()
+        }
     }
 
     // MARK: - Table View Datasource
@@ -43,7 +53,7 @@ class NoteViewController: UITableViewController, AddNoteDelegate {
         
     }
     
-    //MARK: - Swipe TableView Methods
+    //MARK: - TableView Methods
     override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let action = UIContextualAction(style: .destructive, title: "Delete") { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
             print("Ok item will be deleted")
@@ -56,6 +66,12 @@ class NoteViewController: UITableViewController, AddNoteDelegate {
         return UISwipeActionsConfiguration(actions: [action])
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        editNote = true
+        selIndexPathRow = indexPath.row
+        performSegue(withIdentifier: "toNoteEditor", sender: self)
+        
+    }
     
     //MARK: - Persistent Data Storage Methods
     //Saves context (to core data)
@@ -86,42 +102,31 @@ class NoteViewController: UITableViewController, AddNoteDelegate {
     @IBAction func addButton(_ sender: UIBarButtonItem) {
         
         performSegue(withIdentifier: "toNoteEditor", sender: self)
-        loadData()
-        
-    /*
-        var textField = UITextField()
-        let alert = UIAlertController(title: "Add new note", message: "", preferredStyle: .alert)           //Alert controller popup
-        let action = UIAlertAction(title: "Add", style: .default) { (action) in                             //When add button is pressed
-            let newNote = Note(context: self.context)                                                       //Create new note value
-            newNote.content = textField.text!                                                               //Add content value
-        
-            self.NoteArray.append(newNote)
-            self.saveData()                                                                                 //Save Data
-        
-        }
-        
-        alert.addAction(action)
-        alert.addTextField { (field) in
-            field.placeholder = "Enter a new note"
-            let heightConstraint = NSLayoutConstraint(item: field, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 60)
-            field.font = UIFont(name: "Verdana", size: 20)
-            field.autocapitalizationType = UITextAutocapitalizationType.words
-            field.spellCheckingType = UITextSpellCheckingType.yes
-            field.addConstraint(heightConstraint)
-            field.minimumFontSize = 30.0
-            textField = field
-            
-        }
-        
-        present(alert, animated: true)
-    */
-        
+    }
+    
+    @IBAction func onAboutButtonPressed(_ sender: UIBarButtonItem) {
+        aboutRequest = true
+        performSegue(withIdentifier: "toAboutView", sender: self)
     }
     
     
     //MARK: - Miscellaneous Methods
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let destination = segue.destination as! NoteEditViewController
-        destination.delegate = self
+        
+        if aboutRequest{
+            aboutRequest = false
+        }else{
+            if editNote{
+                editNote = false
+                let destination = segue.destination as! NoteEditViewController
+                destination.delegate = self
+                destination.isNew = false
+                destination.oldValue = NoteArray[selIndexPathRow].content!
+            }else{
+                let destination = segue.destination as! NoteEditViewController
+                destination.delegate = self
+            }        }
+        
+        
     }
 }
