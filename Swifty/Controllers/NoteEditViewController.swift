@@ -24,6 +24,7 @@ class NoteEditViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         noteTextView.font = UIFont(name: "Helvetica Neue", size: 18)
+        noteTextView.textColor = UIColor.black
         if !isNew{
             noteTextView.text = oldValue
             isNew = false
